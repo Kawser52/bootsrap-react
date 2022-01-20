@@ -1,29 +1,32 @@
 import logo from './logo.svg';
 import './App.css';
 import Card from './components/Card/Card';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { Button, Row, Spinner } from 'react-bootstrap';
+import { useEffect, useState } from 'react';
+import News from './components/Card/News/News';
 
 
-const items = [
-  {
-    name: 'Abudl eto din ki korli', description: "Kita kiti bangladesh humayon aid kita kiti bangladesh", img: 'https://images.gr-assets.com/authors/1456905354p8/15050617.jpg'
-  },{
-    name: 'Abudl eto din ki korli', description: "Kita kiti bangladesh humayon aid kita kiti bangladesh", img: 'https://images.gr-assets.com/authors/1456905354p8/15050617.jpg'
-  },{
-    name: 'Abudl eto din ki korli', description: "Kita kiti bangladesh humayon aid kita kiti bangladesh", img: 'https://images.gr-assets.com/authors/1456905354p8/15050617.jpg'
-  },{
-    name: 'Abudl eto din ki korli', description: "Kita kiti bangladesh humayon aid kita kiti bangladesh", img: 'https://images.gr-assets.com/authors/1456905354p8/15050617.jpg'
-  }
-]
 
 function App() {
+  const [news,setNews]=useState([]);
+  useEffect(()=>{
+    fetch('https://newsapi.org/v2/everything?q=keyword&apiKey=1fa405b431094ad7943e8d423b35a103')
+    .then(res=>res.json())
+    .then(data=>setNews(data.articles))
+
+  },[])
   return (
-     <div class="row row-cols-1 row-cols-md-2 g-4">
-       {
-         items.map(item=><Card
-         item={item}
-         >
-         </Card>)
-       }
+    <div className="App">
+      {
+        news.length===0 ? <Spinner animation="grow" /> : <Row xs={1} md={2} className="g-4">
+        {
+           news.map(nw=><News news={nw}></News>)
+        }
+        </Row>
+      }
+        
+       
     </div>
   );
 }
